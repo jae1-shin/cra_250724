@@ -1,5 +1,9 @@
 import org.junit.jupiter.api.*;
-import org.mockito.NotExtensible;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -8,11 +12,22 @@ class AssembleTest {
     private Assemble assemble;
     private Assemble assembleSpy;
 
+    private final PrintStream standardOut = System.out; // 기본값
+    private final InputStream standardIn = System.in; // 기본값
+    private ByteArrayOutputStream outputStream;
 
     @BeforeEach
     void setUp() {
         assemble = new Assemble();
         assembleSpy = spy(new Assemble());
+
+        outputStream = new ByteArrayOutputStream();
+    }
+
+    @AfterEach
+    void tearDown() { // 복원
+        System.setOut(standardOut);
+        System.setIn(standardIn);
     }
 
     @Test
@@ -254,4 +269,49 @@ class AssembleTest {
         verify(assembleSpy, times(1)).delay(1500);
         verify(assembleSpy, times(1)).delay(2000);
     }
+
+    @Test
+    void main_정상_시나리오_최대한_다양하게() {
+        // 세단
+        // 돌아가기
+        // 세단
+        // 지엠 엔진
+        // 만도 브레이크
+        // 모비스 스티어링
+        // RUN
+        // TEST
+        // 돌아가기
+        // exit
+        String scenario = "1\n0\n1\n1\n1\n2\n1\n2\n0\nexit\n";
+        InputStream inputStream = new ByteArrayInputStream(scenario.getBytes());
+
+        System.setIn(inputStream);
+        System.setOut(new PrintStream(outputStream));
+
+        assemble.main(new String[]{});
+
+        String consoleOutput = outputStream.toString();
+        assertTrue(consoleOutput.contains("자동차가 동작됩니다.")); // RUN
+        assertTrue(consoleOutput.contains("자동차 부품 조합 테스트 결과 : PASS")); // TEST
+        assertTrue(consoleOutput.contains("바이바이")); // exit
+    }
+
+    @Test
+    void main_비정상_시나리오_라인_커버리지_최대한() {
+        // 잘못된 문자
+        // 숫자 범위 밖
+        // exit
+        String scenario = "abc\n0\nexit\n";
+        InputStream inputStream = new ByteArrayInputStream(scenario.getBytes());
+
+        System.setIn(inputStream);
+        System.setOut(new PrintStream(outputStream));
+
+        assemble.main(new String[]{});
+        String consoleOutput = outputStream.toString();
+        assertTrue(consoleOutput.contains("ERROR :: 숫자만 입력 가능"));
+        assertTrue(consoleOutput.contains("ERROR :: 1 ~ 3 범위만 선택 가능"));
+        assertTrue(consoleOutput.contains("바이바이"));
+    }
+
 }

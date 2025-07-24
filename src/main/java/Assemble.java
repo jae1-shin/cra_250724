@@ -62,11 +62,7 @@ public class Assemble {
             }
 
             if (input == ROLLBACK) {
-                if (isRunOrTestStep(step)) {
-                    step = ASK_CAR_TYPE;
-                } else {
-                    step = Math.max(step - 1, ASK_CAR_TYPE);
-                }
+                step = getRollbackStep(step);
                 continue;
             }
 
@@ -98,6 +94,14 @@ public class Assemble {
         }
 
         sc.close();
+    }
+
+    private int getRollbackStep(int step) {
+        if (isRunOrTestStep(step)) {
+            return ASK_CAR_TYPE;
+        } else {
+            return Math.max(step - 1, ASK_CAR_TYPE);
+        }
     }
 
     boolean isToBeTested(int input) {
