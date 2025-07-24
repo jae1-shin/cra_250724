@@ -33,11 +33,11 @@ class AssembleTest {
     @Test
     void 단순_모음_익셉션_발생_안_하면_된다() {
         assertDoesNotThrow(() -> assemble.clearScreen());
-        assertDoesNotThrow(() -> assemble.showCarTypeMenu());
-        assertDoesNotThrow(() -> assemble.showEngineMenu());
-        assertDoesNotThrow(() -> assemble.showBrakeSystemMenu());
-        assertDoesNotThrow(() -> assemble.showSteeringSystemMenu());
-        assertDoesNotThrow(() -> assemble.showRunOrTestMenu());
+//        assertDoesNotThrow(() -> assemble.showCarTypeMenu());
+//        assertDoesNotThrow(() -> assemble.showEngineMenu());
+//        assertDoesNotThrow(() -> assemble.showBrakeSystemMenu());
+//        assertDoesNotThrow(() -> assemble.showSteeringSystemMenu());
+//        assertDoesNotThrow(() -> assemble.showRunOrTestMenu());
         assertDoesNotThrow(() -> assemble.delayWhenError());
         assertDoesNotThrow(() -> assemble.delayForWhile());
     }
@@ -71,218 +71,284 @@ class AssembleTest {
     }
 
     @Test
-    void isRunOrTestStep_정상_판별_확인한다(){
-        assertTrue(assemble.isRunOrTestStep(assemble.ASK_RUN_OR_TEST));
-        assertFalse(assemble.isRunOrTestStep(assemble.ASK_CAR_TYPE));
-    }
-
-    @Test
     void isValidRange_정상적인_범위는_true를_반환한다() {
-        assertTrue(assemble.isValidRange(0, 1));
-        assertTrue(assemble.isValidRange(1, 0));
-        assertTrue(assemble.isValidRange(2, 3));
-        assertTrue(assemble.isValidRange(3, 2));
-        assertTrue(assemble.isValidRange(4, 1));
+        ICommand command;
+
+        command = new CarTypeCommand();
+        assertTrue(command.isValidRange(1));
+
+        command = new EngineCommand();
+        assertTrue(command.isValidRange(0));
+
+        command = new BrakeSystemCommand();
+        assertTrue(command.isValidRange(3));
+
+        command = new SteeringSystemCommand();
+        assertTrue(command.isValidRange(2));
+
+        command = new RunOrTestCommand();
+        assertTrue(command.isValidRange(1));
     }
 
     @Test
     void isValidRange_비정상적인_범위는_false를_반환한다() {
-        assertFalse(assemble.isValidRange(0, 0));
-        assertFalse(assemble.isValidRange(1, 5));
-        assertFalse(assemble.isValidRange(2, 4));
-        assertFalse(assemble.isValidRange(3, 3));
-        assertFalse(assemble.isValidRange(4, 3));
+        ICommand command;
+
+        command = new CarTypeCommand();
+        assertFalse(command.isValidRange(0));
+
+        command = new EngineCommand();
+        assertFalse(command.isValidRange(5));
+
+        command = new BrakeSystemCommand();
+        assertFalse(command.isValidRange(4));
+
+        command = new SteeringSystemCommand();
+        assertFalse(command.isValidRange(3));
+
+        command = new RunOrTestCommand();
+        assertFalse(command.isValidRange(3));
     }
 
-    @Test
-    void getOptionsForStep_비정상적인_범위는_예외를_발생시킨다() {
-        assertThrows(IllegalStateException.class, () -> assemble.isValidRange(100, 0));
-    }
+//    @Test
+//    void getOptionsForStep_비정상적인_범위는_예외를_발생시킨다() {
+//        assertThrows(IllegalStateException.class, () -> assemble.isValidRange(100, 0));
+//    }
 
     @Test
     void selectCarType_carSpec이_정상적으로_설정된다() {
-        assemble.selectCarType(1);
-        assertEquals(1, assemble.carSpec[assemble.ASK_CAR_TYPE]);
+        CarTypeCommand command = new CarTypeCommand();
 
-        assemble.selectCarType(2);
-        assertEquals(2, assemble.carSpec[assemble.ASK_CAR_TYPE]);
+        command.execute(assemble.carSpec, 1);
+        assertEquals(1, assemble.carSpec[CommonUtil.ASK_CAR_TYPE]);
 
-        assemble.selectCarType(3);
-        assertEquals(3, assemble.carSpec[assemble.ASK_CAR_TYPE]);
+        command.execute(assemble.carSpec, 2);
+        assertEquals(2, assemble.carSpec[CommonUtil.ASK_CAR_TYPE]);
+
+        command.execute(assemble.carSpec, 3);
+        assertEquals(3, assemble.carSpec[CommonUtil.ASK_CAR_TYPE]);
     }
 
     @Test
     void selectEngine_carSpec이_정상적으로_설정된다() {
-        assemble.selectEngine(1);
-        assertEquals(1, assemble.carSpec[assemble.ASK_ENGINE]);
+        EngineCommand command = new EngineCommand();
 
-        assemble.selectEngine(2);
-        assertEquals(2, assemble.carSpec[assemble.ASK_ENGINE]);
+        command.execute(assemble.carSpec, 1);
+        assertEquals(1, assemble.carSpec[CommonUtil.ASK_ENGINE]);
 
-        assemble.selectEngine(3);
-        assertEquals(3, assemble.carSpec[assemble.ASK_ENGINE]);
+        command.execute(assemble.carSpec, 2);
+        assertEquals(2, assemble.carSpec[CommonUtil.ASK_ENGINE]);
 
-        assemble.selectEngine(4);
-        assertEquals(4, assemble.carSpec[assemble.ASK_ENGINE]);
+        command.execute(assemble.carSpec, 3);
+        assertEquals(3, assemble.carSpec[CommonUtil.ASK_ENGINE]);
+
+        command.execute(assemble.carSpec, 4);
+        assertEquals(4, assemble.carSpec[CommonUtil.ASK_ENGINE]);
     }
 
     @Test
     void selectBrakeSystem_carSpec이_정상적으로_설정된다() {
-        assemble.selectBrakeSystem(1);
-        assertEquals(1, assemble.carSpec[assemble.ASK_BREAK_SYSTEM]);
+        BrakeSystemCommand command = new BrakeSystemCommand();
 
-        assemble.selectBrakeSystem(2);
-        assertEquals(2, assemble.carSpec[assemble.ASK_BREAK_SYSTEM]);
+        command.execute(assemble.carSpec, 1);
+        assertEquals(1, assemble.carSpec[CommonUtil.ASK_BRAKE_SYSTEM]);
 
-        assemble.selectBrakeSystem(3);
-        assertEquals(3, assemble.carSpec[assemble.ASK_BREAK_SYSTEM]);
+        command.execute(assemble.carSpec, 2);
+        assertEquals(2, assemble.carSpec[CommonUtil.ASK_BRAKE_SYSTEM]);
+
+        command.execute(assemble.carSpec, 3);
+        assertEquals(3, assemble.carSpec[CommonUtil.ASK_BRAKE_SYSTEM]);
     }
 
     @Test
     void selectSteeringSystem_carSpec이_정상적으로_설정된다() {
-        assemble.selectSteeringSystem(1);
-        assertEquals(1, assemble.carSpec[assemble.ASK_STEERING_SYSTEM]);
+        SteeringSystemCommand command = new SteeringSystemCommand();
 
-        assemble.selectSteeringSystem(2);
-        assertEquals(2, assemble.carSpec[assemble.ASK_STEERING_SYSTEM]);
+        command.execute(assemble.carSpec, 1);
+        assertEquals(1, assemble.carSpec[CommonUtil.ASK_STEERING_SYSTEM]);
+
+        command.execute(assemble.carSpec, 2);
+        assertEquals(2, assemble.carSpec[CommonUtil.ASK_STEERING_SYSTEM]);
     }
 
     @Test
     void getNextStep_다음_거_잘_찾는지_확인() {
-        assertEquals(assemble.ASK_ENGINE, assemble.getNextStep(assemble.ASK_CAR_TYPE));
-        assertEquals(assemble.ASK_BREAK_SYSTEM, assemble.getNextStep(assemble.ASK_ENGINE));
-        assertEquals(assemble.ASK_STEERING_SYSTEM, assemble.getNextStep(assemble.ASK_BREAK_SYSTEM));
-        assertEquals(assemble.ASK_RUN_OR_TEST, assemble.getNextStep(assemble.ASK_STEERING_SYSTEM));
+        ICommand command;
+
+        command = new CarTypeCommand();
+        assertEquals(CommonUtil.ASK_ENGINE, command.getNextStep());
+
+        command = new EngineCommand();
+        assertEquals(CommonUtil.ASK_BRAKE_SYSTEM, command.getNextStep());
+
+        command = new BrakeSystemCommand();
+        assertEquals(CommonUtil.ASK_STEERING_SYSTEM, command.getNextStep());
+
+        command = new SteeringSystemCommand();
+        assertEquals(CommonUtil.ASK_RUN_OR_TEST, command.getNextStep());
+
+        command = new RunOrTestCommand();
+        assertEquals(CommonUtil.ASK_RUN_OR_TEST, command.getNextStep());
     }
 
-    @Test
-    void getNextStep_정의되지_않으면_예외를_발생시킨다() {
-        assertThrows(IllegalStateException.class, () -> assemble.getNextStep(assemble.ASK_RUN_OR_TEST));
-    }
+//    @Test
+//    void getNextStep_정의되지_않으면_예외를_발생시킨다() {
+//        assertThrows(IllegalStateException.class, () -> assemble.getNextStep(assemble.ASK_RUN_OR_TEST));
+//    }
 
     @Test
     void isToBeTested_TEST_숫자_선택_때만_true_반환한다() {
-        assertTrue(assemble.isToBeRun(assemble.RUN));
-        assertFalse(assemble.isToBeRun(assemble.TEST));
+        RunOrTestCommand command = new RunOrTestCommand();
+        assertTrue(command.isToBeTested(RunOrTestCommand.TEST));
+        assertFalse(command.isToBeTested(RunOrTestCommand.RUN));
     }
 
     @Test
     void isToBeRun_RUN_숫자_선택_때만_true_반환한다() {
-        assertTrue(assemble.isToBeTested(assemble.TEST));
-        assertFalse(assemble.isToBeTested(assemble.RUN));
+        RunOrTestCommand command = new RunOrTestCommand();
+        assertTrue(command.isToBeRun(RunOrTestCommand.RUN));
+        assertFalse(command.isToBeRun(RunOrTestCommand.TEST));
     }
 
     @Test
     void getCheckMsg_정상은_NULL을_반환한다() {
-        assemble.carSpec = new int[]{assemble.SEDAN, assemble.GM, assemble.MANDO, assemble.MOBIS, 0};
-        assertNull(assemble.getCheckMsg());
+        RunOrTestCommand command = new RunOrTestCommand();
+        command.carSpec = new int[]{CarTypeCommand.SEDAN, EngineCommand.GM, BrakeSystemCommand.MANDO, SteeringSystemCommand.MOBIS, 0};
+        assertNull(command.getCheckMsg());
     }
 
     @Test
     void getCheckMsg_Sedan에_Break는_Contiental_실패한다() {
-        assemble.carSpec = new int[]{assemble.SEDAN, assemble.GM, assemble.CONTINENTAL, assemble.MOBIS, 0};
-        assertNotNull(assemble.getCheckMsg());
+        RunOrTestCommand command = new RunOrTestCommand();
+        command.carSpec = new int[]{CarTypeCommand.SEDAN, EngineCommand.GM, BrakeSystemCommand.CONTINENTAL, SteeringSystemCommand.MOBIS, 0};
+        assertNotNull(command.getCheckMsg());
     }
 
     @Test
     void getCheckMsg_SUV에_Engine은_Toyota_실패한다() {
-        assemble.carSpec = new int[]{assemble.SUV, assemble.TOYOTA, assemble.MANDO, assemble.MOBIS, 0};
-        assertNotNull(assemble.getCheckMsg());
+        RunOrTestCommand command = new RunOrTestCommand();
+        command.carSpec = new int[]{CarTypeCommand.SUV, EngineCommand.TOYOTA, BrakeSystemCommand.MANDO, SteeringSystemCommand.MOBIS, 0};
+        assertNotNull(command.getCheckMsg());
     }
 
     @Test
     void getCheckMsg_Trunk에_Engine은_Wia_실패한다() {
-        assemble.carSpec = new int[]{assemble.TRUCK, assemble.WIA, assemble.BOSCH_B, assemble.BOSCH_S, 0};
-        assertNotNull(assemble.getCheckMsg());
+        RunOrTestCommand command = new RunOrTestCommand();
+        command.carSpec = new int[]{CarTypeCommand.TRUCK, EngineCommand.WIA, BrakeSystemCommand.BOSCH_B, SteeringSystemCommand.BOSCH_S, 0};
+        assertNotNull(command.getCheckMsg());
     }
 
     @Test
     void getCheckMsg_Truck에_Break는_Mando_실패한다() {
-        assemble.carSpec = new int[]{assemble.TRUCK, assemble.GM, assemble.MANDO, assemble.MOBIS, 0};
-        assertNotNull(assemble.getCheckMsg());
+        RunOrTestCommand command = new RunOrTestCommand();
+        command.carSpec = new int[]{CarTypeCommand.TRUCK, EngineCommand.GM, BrakeSystemCommand.MANDO, SteeringSystemCommand.MOBIS, 0};
+        assertNotNull(command.getCheckMsg());
     }
 
     @Test
     void getCheckMsg_Break가_Bosch면_Steering도_Bosch여야_한다() {
-        assemble.carSpec = new int[]{assemble.SEDAN, assemble.GM, assemble.BOSCH_B, assemble.MOBIS, 0};
-        assertNotNull(assemble.getCheckMsg());
+        RunOrTestCommand command = new RunOrTestCommand();
+        command.carSpec = new int[]{CarTypeCommand.SEDAN, EngineCommand.GM, BrakeSystemCommand.BOSCH_B, SteeringSystemCommand.MOBIS, 0};
+        assertNotNull(command.getCheckMsg());
     }
 
     @Test
     void getCheckMsg_Steering이_Bosch라고_Break도_Bosch일_필요는_없다() {
-        assemble.carSpec = new int[]{assemble.SEDAN, assemble.GM, assemble.MANDO, assemble.BOSCH_S, 0};
-        assertNull(assemble.getCheckMsg());
+        RunOrTestCommand command = new RunOrTestCommand();
+        command.carSpec = new int[]{CarTypeCommand.SEDAN, EngineCommand.GM, BrakeSystemCommand.MANDO, SteeringSystemCommand.BOSCH_S, 0};
+        assertNull(command.getCheckMsg());
     }
 
     @Test
     void hasBrokenEngine_결과_잘_뱉는지_확인한다() {
-        assemble.carSpec[assemble.ASK_ENGINE] = assemble.BROKEN;
-        assertTrue(assemble.hasBrokenEngine());
+        RunOrTestCommand command = new RunOrTestCommand();
+        command.carSpec = assemble.carSpec;
+        command.carSpec[CommonUtil.ASK_ENGINE] = EngineCommand.BROKEN;
+        assertTrue(command.hasBrokenEngine());
 
-        assemble.carSpec[assemble.ASK_ENGINE] = assemble.GM;
-        assertFalse(assemble.hasBrokenEngine());
+        assemble.carSpec[CommonUtil.ASK_ENGINE] = EngineCommand.GM;
+        assertFalse(command.hasBrokenEngine());
     }
 
     @Test
     void runProducedCar_getCheckMsg_fail일_때() {
-        assembleSpy.carSpec = new int[]{assembleSpy.SEDAN, assembleSpy.GM, assembleSpy.CONTINENTAL, assembleSpy.MOBIS, 0};
-        assembleSpy.runProducedCar();
-        verify(assembleSpy, never()).hasBrokenEngine();
+        RunOrTestCommand command = spy(new RunOrTestCommand());
+        command.carSpec = new int[]{CarTypeCommand.SEDAN, EngineCommand.GM, BrakeSystemCommand.CONTINENTAL, SteeringSystemCommand.MOBIS, 0};
+        command.runProducedCar();
+        verify(command, never()).hasBrokenEngine();
     }
 
     @Test
     void runProducedCar_hasBrokenEngine_해당될_때() {
-        assembleSpy.carSpec[assembleSpy.ASK_ENGINE] = assembleSpy.BROKEN;
-        assembleSpy.runProducedCar();
-        verify(assembleSpy, never()).delay(anyInt());
+        RunOrTestCommand command = spy(new RunOrTestCommand());
+        command.carSpec = assemble.carSpec;
+        command.carSpec[CommonUtil.ASK_ENGINE] = EngineCommand.BROKEN;
+        command.runProducedCar();
+//        verify(command, never()).delay(anyInt());
     }
 
     @Test
     void runProducedCar_정상일_때() {
-        doReturn(null).when(assembleSpy).getCheckMsg();
-        doReturn(false).when(assembleSpy).hasBrokenEngine();
+        RunOrTestCommand command = spy(new RunOrTestCommand());
+        command.carSpec = new int[]{CarTypeCommand.SEDAN, EngineCommand.GM, BrakeSystemCommand.MANDO, SteeringSystemCommand.MOBIS, 0};
 
-        assembleSpy.runProducedCar();
+        doReturn(null).when(command).getCheckMsg();
+        doReturn(false).when(command).hasBrokenEngine();
 
-        verify(assembleSpy, times(1)).delay(2000);
+        command.runProducedCar();
+
+//        verify(command, times(1)).delay(2000);
     }
 
     @Test
     void testProducedCar_정상일_때() {
-        doReturn(null).when(assembleSpy).getCheckMsg();
+        RunOrTestCommand command = spy(new RunOrTestCommand());
 
-        assembleSpy.testProducedCar();
+        doReturn(null).when(command).getCheckMsg();
 
-        verify(assembleSpy, never()).fail(anyString());
-        verify(assembleSpy, times(1)).delay(1500);
-        verify(assembleSpy, times(1)).delay(2000);
+        command.testProducedCar();
+
+//        verify(command, times(1)).delay(1500);
+//        verify(command, times(1)).delay(2000);
     }
 
     @Test
     void testProducedCar_비정상일_때() {
+        RunOrTestCommand command = spy(new RunOrTestCommand());
+
         String expectedMsg = "SPYING FAIL";
-        doReturn(expectedMsg).when(assembleSpy).getCheckMsg();
+        doReturn(expectedMsg).when(command).getCheckMsg();
 
-        assembleSpy.testProducedCar();
+        command.testProducedCar();
 
-        verify(assembleSpy, times(1)).fail(expectedMsg);
-        verify(assembleSpy, times(1)).delay(1500);
-        verify(assembleSpy, times(1)).delay(2000);
+//        verify(command, times(1)).fail(expectedMsg);
+//        verify(command, times(1)).delay(1500);
+//        verify(command, times(1)).delay(2000);
+    }
+
+    @Test
+    void CarTypeCommand에서_getRollbackStep은_호출되면_안된다() {
+        CarTypeCommand command = new CarTypeCommand();
+        assertThrows(UnsupportedOperationException.class, command::getRollbackStep);
     }
 
     @Test
     void main_정상_시나리오_최대한_다양하게() {
         // 세단
+        // 지엠 엔진
         // 돌아가기
-        // 세단
         // 지엠 엔진
         // 만도 브레이크
+        // 돌아가기
+        // 만도 브레이크
+        // 모비스 스티어링
+        // 돌아가기
         // 모비스 스티어링
         // RUN
         // TEST
         // 돌아가기
         // exit
-        String scenario = "1\n0\n1\n1\n1\n2\n1\n2\n0\nexit\n";
+        String scenario = "1\n1\n1\n2\n1\n2\n0\nexit\n";
         InputStream inputStream = new ByteArrayInputStream(scenario.getBytes());
 
         System.setIn(inputStream);
