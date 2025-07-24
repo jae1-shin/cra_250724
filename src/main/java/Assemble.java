@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Assemble {
     final String CLEAR_SCREEN = "\033[H\033[2J";
 
-    static final int ASK_CAR_TYPE = 0, ASK_ENGINE = 1, ASK_BREAK_SYSTEM = 2, ASK_STEERING_SYSTEM = 3, ASK_RUN_OR_TEST = 4;
+    final int ASK_CAR_TYPE = 0, ASK_ENGINE = 1, ASK_BREAK_SYSTEM = 2, ASK_STEERING_SYSTEM = 3, ASK_RUN_OR_TEST = 4;
 
     final int ROLLBACK = 0;
     final int SEDAN = 1, SUV = 2, TRUCK = 3;
@@ -171,7 +171,7 @@ public class Assemble {
         printPartition();
     }
     void showBrakeSystemMenu() {
-        printInputOptions(ASK_STEERING_SYSTEM, BRAKE_SYSTEMS);
+        printInputOptions(ASK_BREAK_SYSTEM, BRAKE_SYSTEMS);
         printPartition();
     }
     void showSteeringSystemMenu() {
