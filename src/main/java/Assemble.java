@@ -244,31 +244,41 @@ public class Assemble {
         switch (step) {
             case ASK_CAR_TYPE:
                 if (!CAR_TYPES.containsKey(input)) {
-                    System.out.println("ERROR :: 차량 타입은 1 ~ 3 범위만 선택 가능");
+                    int min = CAR_TYPES.keySet().stream().min(Integer::compareTo).orElse(0);
+                    int max = CAR_TYPES.keySet().stream().max(Integer::compareTo).orElse(0);
+                    System.out.printf("ERROR :: 차량 타입은 %d ~ %d 범위만 선택 가능\n", min, max);
                     return false;
                 }
                 break;
             case ASK_ENGINE:
                 if (!ENGINES.containsKey(input)) {
-                    System.out.println("ERROR :: 엔진은 1 ~ 4 범위만 선택 가능");
+                    int min = ENGINES.keySet().stream().min(Integer::compareTo).orElse(0);
+                    int max = ENGINES.keySet().stream().max(Integer::compareTo).orElse(0);
+                    System.out.printf("ERROR :: 엔진은 %d ~ %d 범위만 선택 가능\n", min, max);
                     return false;
                 }
                 break;
             case ASK_BREAK_SYSTEM:
                 if (!BRAKE_SYSTEMS.containsKey(input)) {
-                    System.out.println("ERROR :: 제동장치는 1 ~ 3 범위만 선택 가능");
+                    int min = BRAKE_SYSTEMS.keySet().stream().min(Integer::compareTo).orElse(0);
+                    int max = BRAKE_SYSTEMS.keySet().stream().max(Integer::compareTo).orElse(0);
+                    System.out.printf("ERROR :: 제동장치는 %d ~ %d 범위만 선택 가능\n", min, max);
                     return false;
                 }
                 break;
             case ASK_STEERING_SYSTEM:
                 if (!STEERING_SYSTEMS.containsKey(input)) {
-                    System.out.println("ERROR :: 조향장치는 1 ~ 2 범위만 선택 가능");
+                    int min = STEERING_SYSTEMS.keySet().stream().min(Integer::compareTo).orElse(0);
+                    int max = STEERING_SYSTEMS.keySet().stream().max(Integer::compareTo).orElse(0);
+                    System.out.printf("ERROR :: 조향장치는 %d ~ %d 범위만 선택 가능\n", min, max);
                     return false;
                 }
                 break;
             case ASK_RUN_OR_TEST:
                 if (!RUN_OR_TEST.containsKey(input)) {
-                    System.out.println("ERROR :: Run 또는 Test 중 하나를 선택 필요");
+                    int min = RUN_OR_TEST.keySet().stream().min(Integer::compareTo).orElse(0);
+                    int max = RUN_OR_TEST.keySet().stream().max(Integer::compareTo).orElse(0);
+                    System.out.printf("ERROR :: Run 또는 Test는 %d ~ %d 범위만 선택 가능\n", min, max);
                     return false;
                 }
                 break;
